@@ -8,7 +8,7 @@ interface CalculationBreakdownProps {
   fromCurrency: string;
   toAmount: string;
   toCurrency: string;
-  exchangeRate: string;
+  exchangeRate: string | null;
 }
 
 export default function CalculationBreakdown({

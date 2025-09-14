@@ -30,14 +30,13 @@ export default function CurrencyConverter() {
     getExchangeRate,
   } = useConverterState();
 
-
   if (currenciesLoading && !currenciesError) {
     return <LoadingState />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <motion.div 
+      <motion.div
         layout
         transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
         className="w-full max-w-lg space-y-6"
@@ -46,76 +45,91 @@ export default function CurrencyConverter() {
 
         <motion.div
           layout
-          transition={{ 
-            duration: 0.25, 
+          transition={{
+            duration: 0.25,
             ease: [0.4, 0.0, 0.2, 1],
-            layout: { duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }
+            layout: { duration: 0.25, ease: [0.4, 0.0, 0.2, 1] },
           }}
         >
           <Card className="shadow-lg border border-gray-200 bg-white">
             <CardContent className="p-8 space-y-6">
-            <CurrencyInput
-              label="From"
-              amount={fromAmount}
-              currency={fromCurrency}
-              currencies={currencies}
-              onAmountChange={setFromAmount}
-              onCurrencyChange={setFromCurrency}
-              currenciesError={currenciesError}
-            />
+              <CurrencyInput
+                label="From"
+                amount={fromAmount}
+                currency={fromCurrency}
+                currencies={currencies}
+                onAmountChange={setFromAmount}
+                onCurrencyChange={setFromCurrency}
+                currenciesError={currenciesError}
+              />
 
-            <SwapButton
-              onSwap={handleSwapCurrencies}
-              disabled={!fromCurrency || !toCurrency || converting || !!currenciesError}
-            />
+              <SwapButton
+                onSwap={handleSwapCurrencies}
+                disabled={
+                  !fromCurrency ||
+                  !toCurrency ||
+                  converting ||
+                  !!currenciesError
+                }
+              />
 
-            <CurrencyInput
-              label="To"
-              amount={toAmount}
-              currency={toCurrency}
-              currencies={currencies}
-              onCurrencyChange={setToCurrency}
-              readOnly
-              isConverting={converting}
-              currenciesError={currenciesError}
-            />
+              <CurrencyInput
+                label="To"
+                amount={toAmount}
+                currency={toCurrency}
+                currencies={currencies}
+                onCurrencyChange={setToCurrency}
+                readOnly
+                isConverting={converting}
+                currenciesError={currenciesError}
+              />
 
-            <ConvertButton
-              onConvert={handleConvert}
-              disabled={!fromCurrency || !toCurrency || !fromAmount || fromAmount === "0" || converting || !!currenciesError}
-              converting={converting}
-            />
+              <ConvertButton
+                onConvert={handleConvert}
+                disabled={
+                  !fromCurrency ||
+                  !toCurrency ||
+                  !fromAmount ||
+                  fromAmount === "0" ||
+                  converting ||
+                  !!currenciesError
+                }
+                converting={converting}
+              />
 
-            {error && (
-              <div className="text-red-600 text-sm text-center bg-red-50 border border-red-200 rounded-lg p-3">
-                {error}
-              </div>
-            )}
-
-            <AnimatePresence mode="wait">
-              {fromCurrency && toCurrency && toAmount && !converting && (
-                <ExchangeRateDisplay
-                  fromCurrency={fromCurrency}
-                  toCurrency={toCurrency}
-                  exchangeRate={getExchangeRate() || "1.000000"}
-                />
+              {error && (
+                <div className="text-red-600 text-sm text-center bg-red-50 border border-red-200 rounded-lg p-3">
+                  {error}
+                </div>
               )}
-            </AnimatePresence>
 
-            <AnimatePresence mode="wait">
-              {fromAmount && toAmount && fromCurrency && toCurrency && !converting && (
-                <CalculationBreakdown
-                  fromAmount={fromAmount}
-                  fromCurrency={fromCurrency}
-                  toAmount={toAmount}
-                  toCurrency={toCurrency}
-                  exchangeRate={getExchangeRate() || "1.000000"}
-                />
-              )}
-            </AnimatePresence>
+              <AnimatePresence mode="wait">
+                {fromCurrency && toCurrency && toAmount && !converting && (
+                  <ExchangeRateDisplay
+                    fromCurrency={fromCurrency}
+                    toCurrency={toCurrency}
+                    exchangeRate={getExchangeRate()}
+                  />
+                )}
+              </AnimatePresence>
 
-          </CardContent>
-        </Card>
+              <AnimatePresence mode="wait">
+                {fromAmount &&
+                  toAmount &&
+                  fromCurrency &&
+                  toCurrency &&
+                  !converting && (
+                    <CalculationBreakdown
+                      fromAmount={fromAmount}
+                      fromCurrency={fromCurrency}
+                      toAmount={toAmount}
+                      toCurrency={toCurrency}
+                      exchangeRate={getExchangeRate()}
+                    />
+                  )}
+              </AnimatePresence>
+            </CardContent>
+          </Card>
         </motion.div>
 
         <div className="text-center text-sm text-gray-500">

@@ -10,6 +10,7 @@ import SwapButton from "@/components/SwapButton";
 import ConvertButton from "@/components/ConvertButton";
 import ExchangeRateDisplay from "@/components/ExchangeRateDisplay";
 import CalculationBreakdown from "@/components/CalculationBreakdown";
+import ConversionHistory from "./ConversionHistory";
 
 export default function CurrencyConverter() {
   const {
@@ -28,6 +29,7 @@ export default function CurrencyConverter() {
     handleSwapCurrencies,
     handleConvert,
     getExchangeRate,
+    conversions
   } = useConverterState();
 
   if (currenciesLoading && !currenciesError) {
@@ -130,6 +132,7 @@ export default function CurrencyConverter() {
               </AnimatePresence>
             </CardContent>
           </Card>
+          <ConversionHistory conversions={conversions} />
         </motion.div>
 
         <div className="text-center text-sm text-gray-500">

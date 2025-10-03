@@ -1,0 +1,17 @@
+saves a conversion to a list on the UI 
+
+no more than 5 conversion at once, and conversions get removed from the bottom of the list 
+
+easily need to be able to extend to more than 5 if needed  (use slice)
+
+
+1. ConvesrionHistory Interface 
+
+2. custom conversion hook 
+
+3. UI component 
+
+4. useConverter state 
+
+5. currency converter 
+

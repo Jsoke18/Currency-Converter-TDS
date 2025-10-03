@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { useCurrencies, useCurrencyConversion } from "@/hooks/useCurrency";
 import { getCurrencySymbol } from "@/lib/currency";
-
+import { useConversionHistory } from "@/hooks/useConversionHistory";
 export function useConverterState() {
   const [fromCurrency, setFromCurrency] = useState<string>("");
   const [toCurrency, setToCurrency] = useState<string>("");
   const [fromAmount, setFromAmount] = useState("");
   const [toAmount, setToAmount] = useState("");
   const [error, setError] = useState<string>("");
-
+  const { conversions, addConversion } = useConversionHistory();
   const apiKey = process.env.NEXT_PUBLIC_CURRENCY_API_KEY;
 
   const {
@@ -17,14 +17,14 @@ export function useConverterState() {
     error: currenciesError,
   } = useCurrencies(apiKey);
 
-  const {
-    convert,
-    converting,
-  } = useCurrencyConversion();
+  const { convert, converting } = useCurrencyConversion();
 
-  const getCurrencySymbolForDisplay = useCallback((currencyCode: string) => {
-    return getCurrencySymbol(currencies, currencyCode) || currencyCode;
-  }, [currencies]);
+  const getCurrencySymbolForDisplay = useCallback(
+    (currencyCode: string) => {
+      return getCurrencySymbol(currencies, currencyCode) || currencyCode;
+    },
+    [currencies]
+  );
 
   const getExchangeRate = useCallback(() => {
     if (!fromAmount || !toAmount || fromAmount === "0") {
@@ -65,10 +65,17 @@ export function useConverterState() {
       if (result !== null) {
         setToAmount(result.toFixed(2));
       }
+      addConversion({
+        fromCurrency,
+        toCurrency,
+        fromAmount: amount,
+        toAmount: result,
+        exchangeRate: result / amount,
+      });
     } catch {
       setError("Conversion failed. Please try again.");
     }
-  }, [fromCurrency, toCurrency, fromAmount, convert, apiKey]);
+  }, [fromCurrency, toCurrency, fromAmount, convert, apiKey, addConversion]);
 
   useEffect(() => {
     setToAmount("");
@@ -92,5 +99,6 @@ export function useConverterState() {
     handleConvert,
     getCurrencySymbolForDisplay,
     getExchangeRate,
+    conversions
   };
 }
